@@ -12,10 +12,10 @@ REM Follow step by step below
 
 REM
 echo "Running \m"
-gcc -c -o Example1b.o Example1b.cpp -I\"C:\Compiler\mingw64\x86_64-w64-mingw32\include"
+gcc -c -o Test1.o TriangleScan_Base.cpp -I\"C:\Compiler\mingw64\x86_64-w64-mingw32\include"
 cls
 echo "Compiling Graphic"
-gcc -o Example1b.exe  Example1b.o -L\"C:/Compiler/mingw64/x86_64-w64-mingw32/lib -lopengl32 -lglu32 -lfreeglut
+gcc -o Test1.exe  Test1.o -L\"C:/Compiler/mingw64/x86_64-w64-mingw32/lib -lopengl32 -lglu32 -lfreeglut
 cls
 echo "App Running"
-Example1b.exe
+Test1.exe
