@@ -96,9 +96,34 @@ void ScanConvertTriangle(
     l02_g += l02_mg;
     l02_b += l02_mb;
   }
-
   // Scan the second half of the triangle
   // TODO: handle the case when x1==x2
+
+  float l12_y, l12_m;
+  float l12_r, l12_g, l12_b, l12_mr, l12_mg, l12_mb;
+
+  l12_m = (float)(y2 - y1) / (x2 - x1);
+  l12_mr = (float)(r2 - r1) / (x2 - x1);
+  l12_mg = (float)(g2 - g1) / (x2 - x1);
+  l12_mb = (float)(b2 - b1) / (x2 - x1);
+
+  l12_y = y1;
+  l12_r = r1;
+  l12_g = g1;
+  l12_b = b1;
+
+  for (x = x1; x < x2; x++)
+  {
+    if (l02_y >= l12_y)
+    {
+      FillScanLine(x, l02_y, l02_r, l02_g, l02_b, l12_y, l12_r, l12_g, l12_b);
+    }
+
+    l12_y += l12_m;
+    l12_r += l12_mr;
+    l12_g += l12_mg;
+    l12_b += l12_mb;
+  }
 }
 
 /* Called when mouse button pressed: */
@@ -179,8 +204,8 @@ void display(void)
 
   // Write the information stored in "frame_buffer" to the color buffer
   glDrawPixels(WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, frame_buffer);
+  glutMouseFunc(mousebuttonhandler);
   glFlush();
-  ScanConvertTriangle(5,6,7,8,9,10,11,12,13,14,15,16,17,18,19);
 }
 
 int main(int argc, char **argv)
@@ -190,11 +215,8 @@ int main(int argc, char **argv)
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
   glutInitWindowSize(WIDTH, HEIGHT);
   glutCreateWindow("Frame Buffer Example");
-
   // Specify which functions get called for display and mouse events:
   glutDisplayFunc(display);
-  glutMouseFunc(mousebuttonhandler);
-
   glutMainLoop();
 
   return 0;
