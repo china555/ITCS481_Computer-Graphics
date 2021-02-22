@@ -118,11 +118,20 @@ void ScanConvertTriangle(
     {
       FillScanLine(x, l02_y, l02_r, l02_g, l02_b, l12_y, l12_r, l12_g, l12_b);
     }
+    else
+    {
+      FillScanLine(x, l12_y, l12_r, l12_g, l12_b, l02_y, l02_r, l02_g, l02_b);
+    }
 
     l12_y += l12_m;
     l12_r += l12_mr;
     l12_g += l12_mg;
     l12_b += l12_mb;
+
+    l02_y += l02_m;
+    l02_r += l02_mr;
+    l02_g += l02_mg;
+    l02_b += l02_mb;
   }
 }
 
@@ -185,6 +194,34 @@ void mousebuttonhandler(int button, int state, int x, int y)
       else
       { // x1 < x0
         // TODO: fill in the rest here
+        if (points[1][0] < points[0][0])
+        {
+          if (points[0][0] <= points[2][0])
+          { // x1 <= x0 <= x2
+            ScanConvertTriangle(
+                points[1][0], points[1][1], color[1][0], color[1][1], color[1][2], // x0, y0, r0, g0, b0
+                points[0][0], points[0][1], color[0][0], color[0][1], color[0][2], // x1, y1, r1, g1, b1
+                points[2][0], points[2][1], color[2][0], color[2][1], color[2][2]  // x2, y2, r2, g2, b2
+            );
+          }
+          else if (points[1][0] <= points[2][0])
+          {
+            //x1 <= x2 <= x0
+            ScanConvertTriangle(
+                points[1][0], points[1][1], color[1][0], color[1][1], color[1][2], // x0, y0, r0, g0, b0
+                points[2][0], points[2][1], color[2][0], color[2][1], color[2][2], // x2, y2, r2, g2, b2
+                points[0][0], points[0][1], color[0][0], color[0][1], color[0][2]  // x1, y1, r1, g1, b1
+            );
+          }
+          else
+          {
+            ScanConvertTriangle(
+                points[2][0], points[2][1], color[2][0], color[2][1], color[2][2], // x2, y2, r2, g2, b2
+                points[1][0], points[1][1], color[1][0], color[1][1], color[1][2], // x0, y0, r0, g0, b0
+                points[0][0], points[0][1], color[0][0], color[0][1], color[0][2]  // x1, y1, r1, g1, b1
+            );
+          }
+        }
       }
       cnt = 0;
     }
