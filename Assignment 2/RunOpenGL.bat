@@ -12,10 +12,10 @@ REM Follow step by step below
 
 REM
 echo "Running \m"
-gcc -c -o Test1.o plane1_base.cpp -I\"C:\Compiler\mingw64\x86_64-w64-mingw32\include"
+gcc -c -o Test1.o plane1_base.cpp -I\"C:\Compiler\mingw64\x86_64-w64-mingw32\include" -I"C:\Libraries\gmtl-0.6.1"
 cls
 echo "Compiling Graphic"
-gcc -o Test1.exe  Test1.o -L\"C:/Compiler/mingw64/x86_64-w64-mingw32/lib -lopengl32 -lglu32 -lfreeglut
+g++ -o Test1.exe  Test1.o -L\"C:/Compiler/mingw64/x86_64-w64-mingw32/lib" -lopengl32 -lglu32 -lfreeglut
 cls
 echo "App Running"
 Test1.exe
