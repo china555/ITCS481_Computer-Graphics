@@ -378,13 +378,13 @@ int main(int argc, char **argv)
   
   glutCreateWindow("Plane Episode 1");
 
-  glutDisplayFunc(DisplayFunc);
-  glutReshapeFunc(ReshapeFunc);
-  glutKeyboardFunc(KeyboardFunc);
+  // glutDisplayFunc(DisplayFunc);
+  // glutReshapeFunc(ReshapeFunc);
+  // glutKeyboardFunc(KeyboardFunc);
   
-  InitGL();
+  // InitGL();
 
-  glutMainLoop();
+  // glutMainLoop();
 
   return 0;
 }
