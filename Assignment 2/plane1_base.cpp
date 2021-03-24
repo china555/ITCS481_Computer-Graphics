@@ -67,6 +67,8 @@ gmtl::Matrix44f ztransp_mat;
 gmtl::Matrix44f ztransn_mat;
 gmtl::Matrix44f xtransp_mat;
 gmtl::Matrix44f xtransn_mat;
+gmtl::Matrix44f ytransp_mat;
+gmtl::Matrix44f ytransn_mat;
 gmtl::Matrix44f zrotp_mat;
 gmtl::Matrix44f zrotn_mat;
 gmtl::Matrix44f xrotp_mat;
@@ -124,6 +126,16 @@ void InitMatrices()
   xtransp_mat.setState(gmtl::Matrix44f::TRANS);
 
   gmtl::invert(xtransn_mat, xtransp_mat);
+
+  // Positive Y-Translation
+  ytransp_mat.set(1, 0, 0, 0,
+                  0, 1, 0, TRANS_AMOUNT,
+                  0, 0, 1, 0,
+                  0, 0, 0, 1);
+  ytransp_mat.setState(gmtl::Matrix44f::TRANS);
+
+  gmtl::invert(ytransn_mat, ytransp_mat);
+  
   // Positive Z-rotation (roll)
   zrotp_mat.set(COSTHETA, -SINTHETA, 0, 0,
                 SINTHETA, COSTHETA, 0, 0,
@@ -326,9 +338,6 @@ void KeyboardFunc(unsigned char key, int x, int y)
   case 'd': // Rolls the plane (- Y-rot)
     plane_pose = plane_pose * yrotn_mat;
     break;
-  default:
-    glutSpecialFunc(SpecialKeys);
-    break;
 
     // TODO: Add the remaining controls/transforms
     //|____________________________________________________________________
@@ -336,14 +345,27 @@ void KeyboardFunc(unsigned char key, int x, int y)
     //| Camera controls
     //|____________________________________________________________________
 
-  case 'k': // Forward translation of the camera (negative Z-translation - cameras looks in its (local) -Z direction)
+  case '8': // Forward translation of the camera (negative Z-translation - cameras looks in its (local) -Z direction)
     cam_pose = cam_pose * ztransn_mat;
     break;
-  case ';': // Backward translation of the camera
+  case '2': // Backward translation of the camera
     cam_pose = cam_pose * ztransp_mat;
     break;
-
     // TODO: Add the remaining controls
+  case '4': // Forward translation of the camera (negative Z-translation - cameras looks in its (local) -Z direction)
+    cam_pose = cam_pose * xtransn_mat;
+    break;
+  case '6': // Backward translation of the camera
+    cam_pose = cam_pose * xtransp_mat;
+    break;
+  case '*': // Forward translation of the camera (negative Z-translation - cameras looks in its (local) -Z direction)
+    cam_pose = cam_pose * ytransn_mat;
+    break;
+  case '/': // Backward translation of the camera
+    cam_pose = cam_pose * ytransp_mat;
+    break;
+  default:
+    glutSpecialFunc(SpecialKeys);
   }
 
   gmtl::invert(view_mat, cam_pose); // Updates view transform to reflect the change in camera transform
@@ -461,14 +483,14 @@ void DrawPlane(const float width, const float length, const float height)
   // Body is red
   glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(0.0f, 0.0f, l);
-  glVertex3f(w*2, 0.0f, -l);
-  glVertex3f(-w*2, 0.0f, -l);
+  glVertex3f(w * 2, 0.0f, -l);
+  glVertex3f(-w * 2, 0.0f, -l);
 
   // Wing is blue
   glColor3f(0.0f, 0.0f, 1.0f);
   glVertex3f(0.0f, 0.0f, 0.0f);
   glVertex3f(0.0f, 0.0f, -l);
-  glVertex3f(0.0f, height*1.5, -l);
+  glVertex3f(0.0f, height * 1.5, -l);
   glEnd();
 }
 void DrawPlane2()
