@@ -29,6 +29,7 @@
 #include <gmtl/gmtl.h>
 
 #include <GL/glut.h>
+#include <windows.h>
 
 //|___________________
 //|
@@ -36,12 +37,12 @@
 //|___________________
 
 // Plane dimensions
-const float P_WIDTH  = 3;
+const float P_WIDTH = 3;
 const float P_LENGTH = 3;
 const float P_HEIGHT = 1.5;
 
-// Camera's view frustum 
-const float CAM_FOV  = 60.0f;     // Field of view in degs
+// Camera's view frustum
+const float CAM_FOV = 60.0f; // Field of view in degs
 
 //|___________________
 //|
@@ -49,21 +50,25 @@ const float CAM_FOV  = 60.0f;     // Field of view in degs
 //|___________________
 
 // Track window dimensions, initialized to 800x600
-int w_width    = 800;
-int w_height   = 600;
+int w_width = 800;
+int w_height = 600;
 
 // Plane pose (position & orientation)
 gmtl::Matrix44f plane_pose; // T, as defined in the handout, initialized to IDENTITY by default
 
 // Camera pose
-gmtl::Matrix44f cam_pose;   // C, as defined in the handout
-gmtl::Matrix44f view_mat;   // View transform is C^-1 (inverse of the camera transform C)
+gmtl::Matrix44f cam_pose; // C, as defined in the handout
+gmtl::Matrix44f view_mat; // View transform is C^-1 (inverse of the camera transform C)
 
 // Transformation matrices applied to plane and camera poses
 gmtl::Matrix44f ztransp_mat;
 gmtl::Matrix44f ztransn_mat;
 gmtl::Matrix44f zrotp_mat;
 gmtl::Matrix44f zrotn_mat;
+gmtl::Matrix44f xrotp_mat;
+gmtl::Matrix44f xrotn_mat;
+gmtl::Matrix44f yrotp_mat;
+gmtl::Matrix44f yrotn_mat;
 
 //|___________________
 //|
@@ -77,6 +82,8 @@ void KeyboardFunc(unsigned char key, int x, int y);
 void ReshapeFunc(int w, int h);
 void DrawCoordinateFrame(const float l);
 void DrawPlane(const float width, const float length, const float height);
+void DrawPlane2();
+void SpecialKeys(int key, int x, int y);
 
 //|____________________________________________________________________
 //|
@@ -91,7 +98,7 @@ void DrawPlane(const float width, const float length, const float height);
 void InitMatrices()
 {
   const float TRANS_AMOUNT = 1.0f;
-  const float ROT_AMOUNT   = gmtl::Math::deg2Rad(5.0f); // specified in degs, but get converted to radians
+  const float ROT_AMOUNT = gmtl::Math::deg2Rad(5.0f); // specified in degs, but get converted to radians
 
   const float COSTHETA = cos(ROT_AMOUNT);
   const float SINTHETA = sin(ROT_AMOUNT);
@@ -101,34 +108,54 @@ void InitMatrices()
                   0, 1, 0, 0,
                   0, 0, 1, TRANS_AMOUNT,
                   0, 0, 0, 1);
-  ztransp_mat.setState(gmtl::Matrix44f::TRANS);  
+  ztransp_mat.setState(gmtl::Matrix44f::TRANS);
 
   gmtl::invert(ztransn_mat, ztransp_mat);
 
   // Positive Z-rotation (roll)
   zrotp_mat.set(COSTHETA, -SINTHETA, 0, 0,
-                SINTHETA,  COSTHETA, 0, 0,
-                       0,         0, 1, 0,
-                       0,         0, 0, 1);
-  zrotp_mat.setState(gmtl::Matrix44f::ORTHOGONAL);                
+                SINTHETA, COSTHETA, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1);
+  zrotp_mat.setState(gmtl::Matrix44f::ORTHOGONAL);
 
   // Negative Z-rotation (roll)
   gmtl::invert(zrotn_mat, zrotp_mat);
 
+  // Positive X-rotation (picth)
+  xrotp_mat.set(
+      1, 0, 0, 0,
+      0, COSTHETA, -SINTHETA, 0,
+      0, SINTHETA, COSTHETA, 0,
+      0, 0, 0, 1);
+  xrotp_mat.setState(gmtl::Matrix44f::ORTHOGONAL);
+  // Negative X-rotation (roll)
+  gmtl::invert(xrotn_mat, xrotp_mat);
+
+  // Positive Y-rotation (yall)
+  yrotp_mat.set(
+      COSTHETA, 0, SINTHETA, 0,
+      0, 1, 0, 0,
+      -SINTHETA, 0, COSTHETA, 0,
+      0, 0, 0, 1);
+  yrotp_mat.setState(gmtl::Matrix44f::ORTHOGONAL);
+  // Negative Y-rotation (roll)
+  gmtl::invert(yrotn_mat, yrotp_mat);
+
   // Inits plane pose
-  plane_pose.set(1, 0, 0,  1.0f,
-                 0, 1, 0,  0.0f,
-                 0, 0, 1,  4.0f,
-                 0, 0, 0,  1.0f);
-  plane_pose.setState(gmtl::Matrix44f::AFFINE);     // AFFINE because the plane pose can contain both translation and rotation         
+  plane_pose.set(1, 0, 0, 1.0f,
+                 0, 1, 0, 0.0f,
+                 0, 0, 1, 4.0f,
+                 0, 0, 0, 1.0f);
+  plane_pose.setState(gmtl::Matrix44f::AFFINE); // AFFINE because the plane pose can contain both translation and rotation
 
   // Inits camera pose and view transform
-  cam_pose.set(1, 0, 0,  2.0f,
-               0, 1, 0,  1.0f,
+  cam_pose.set(1, 0, 0, 2.0f,
+               0, 1, 0, 1.0f,
                0, 0, 1, 15.0f,
-               0, 0, 0,  1.0f);
-  cam_pose.setState(gmtl::Matrix44f::AFFINE);            
-  gmtl::invert(view_mat, cam_pose);                 // View transform is the inverse of the camera pose
+               0, 0, 0, 1.0f);
+  cam_pose.setState(gmtl::Matrix44f::AFFINE);
+  gmtl::invert(view_mat, cam_pose); // View transform is the inverse of the camera pose
 }
 
 //|____________________________________________________________________
@@ -143,8 +170,8 @@ void InitMatrices()
 
 void InitGL(void)
 {
-  glClearColor(0.7f, 0.7f, 0.7f, 1.0f); 
-  glEnable(GL_DEPTH_TEST); 
+  glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
+  glEnable(GL_DEPTH_TEST);
   glShadeModel(GL_SMOOTH);
 }
 
@@ -161,37 +188,38 @@ void InitGL(void)
 void DisplayFunc(void)
 {
   // Modelview matrix
-  gmtl::Matrix44f modelview_mat;        // M, as defined in the handout
+  gmtl::Matrix44f modelview_mat; // M, as defined in the handout
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-//|____________________________________________________________________
-//|
-//| Viewport 1 rendering: shows the moving camera's view
-//|____________________________________________________________________
+  //|____________________________________________________________________
+  //|
+  //| Viewport 1 rendering: shows the moving camera's view
+  //|____________________________________________________________________
 
-  glViewport(0, 0, (GLsizei) w_width/2, (GLsizei) w_height);
+  glViewport(0, 0, (GLsizei)w_width / 2, (GLsizei)w_height);
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(CAM_FOV, (float)w_width/(2*w_height), 0.1f, 100.0f);     // Check MSDN: google "gluPerspective msdn"
+  gluPerspective(CAM_FOV, (float)w_width / (2 * w_height), 0.1f, 100.0f); // Check MSDN: google "gluPerspective msdn"
 
   // Approach1
   glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();                          // A good practice for beginner
+  glLoadIdentity(); // A good practice for beginner
 
   // Draws world coordinate frame
-  modelview_mat = view_mat;                  // M = C^-1
+  modelview_mat = view_mat; // M = C^-1
   glLoadMatrixf(modelview_mat.mData);
   DrawCoordinateFrame(10);
 
   // Draws plane and its local frame
-  modelview_mat *= plane_pose;               // M = C^-1 * T
+  modelview_mat *= plane_pose; // M = C^-1 * T
   glLoadMatrixf(modelview_mat.mData);
   DrawPlane(P_WIDTH, P_LENGTH, P_HEIGHT);
+  // DrawPlane2();
   DrawCoordinateFrame(3);
 
-/*
+  /*
   // Approach 2 (gives the same results as the approach 1)
   glMatrixMode(GL_MODELVIEW);
 
@@ -205,19 +233,19 @@ void DisplayFunc(void)
   DrawCoordinateFrame(3);
 */
 
-//|____________________________________________________________________
-//|
-//| TODO: Viewport 2 rendering: shows the fixed top-down view
-//|____________________________________________________________________
+  //|____________________________________________________________________
+  //|
+  //| TODO: Viewport 2 rendering: shows the fixed top-down view
+  //|____________________________________________________________________
 
   // glViewport...
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(CAM_FOV, (float)w_width/(2*w_height), 0.1f, 100.0f);
+  gluPerspective(CAM_FOV, (float)w_width / (2 * w_height), 0.1f, 100.0f);
 
   // glMatrixMode(GL_MODELVIEW);
-  // glLoadIdentity(); 
+  // glLoadIdentity();
   // ...
 
   glFlush();
@@ -232,50 +260,73 @@ void DisplayFunc(void)
 //!
 //! GLUT keyboard callback function: called for every key press event.
 //|____________________________________________________________________
-
+void SpecialKeys(int key, int x, int y)
+{
+  switch (key)
+  {
+  case GLUT_KEY_LEFT:
+    plane_pose = plane_pose * yrotp_mat;
+    break;
+    // case GLUT_KEY_RIGHT:
+    //   doSomething();
+    //   break;
+    // case GLUT_KEY_UP:
+    //   doSomething();
+    //   break;
+    // case GLUT_KEY_DOWN:
+    //   doSomething();
+    //   break;
+  }
+}
 void KeyboardFunc(unsigned char key, int x, int y)
 {
-  switch (key) {
-//|____________________________________________________________________
-//|
-//| Plane controls
-//|____________________________________________________________________
+  switch (key)
+  {
+    //|____________________________________________________________________
+    //|
+    //| Plane controls
+    //|____________________________________________________________________
 
-    case 's': // Forward translation of the plane (positive Z-translation)
-      plane_pose = plane_pose * ztransp_mat;
-      break;
-    case 'f': // Backward translation of the plane
-      plane_pose = plane_pose * ztransn_mat;
-      break;
+  case 's': // Forward translation of the plane (positive Z-translation)
+    plane_pose = plane_pose * ztransp_mat;
+    break;
+  case 'f': // Backward translation of the plane
+    plane_pose = plane_pose * ztransn_mat;
+    break;
 
+  case 'e': // Rolls the plane (+ Z-rot)
+    plane_pose = plane_pose * zrotp_mat;
+    break;
+  case 'q': // Rolls the plane (- Z-rot)
+    plane_pose = plane_pose * zrotn_mat;
+    break;
+  case 'w': // Rolls the plane (+ X-rot)
+    plane_pose = plane_pose * xrotp_mat;
+    break;
+  case 'd': // Rolls the plane (- Y-rot)
+    plane_pose = plane_pose * yrotp_mat;
+    break;
+  default:
+    glutSpecialFunc(SpecialKeys);
 
-    case 'e': // Rolls the plane (+ Z-rot)
-      plane_pose = plane_pose * zrotp_mat;
-      break;
-    case 'q': // Rolls the plane (- Z-rot)
-      plane_pose = plane_pose * zrotn_mat;
-      break;
+    // TODO: Add the remaining controls/transforms
+    //|____________________________________________________________________
+    //|
+    //| Camera controls
+    //|____________________________________________________________________
 
-
-    // TODO: Add the remaining controls/transforms        
-
-//|____________________________________________________________________
-//|
-//| Camera controls
-//|____________________________________________________________________
-
-    case 'k': // Forward translation of the camera (negative Z-translation - cameras looks in its (local) -Z direction)
-      cam_pose = cam_pose * ztransn_mat;
-      break;
-    case ';': // Backward translation of the camera
-      cam_pose = cam_pose * ztransp_mat;
-      break;
+  case 'k': // Forward translation of the camera (negative Z-translation - cameras looks in its (local) -Z direction)
+    cam_pose = cam_pose * ztransn_mat;
+    break;
+  case ';': // Backward translation of the camera
+    cam_pose = cam_pose * ztransp_mat;
+    break;
 
     // TODO: Add the remaining controls
   }
 
-  gmtl::invert(view_mat, cam_pose);       // Updates view transform to reflect the change in camera transform
-  glutPostRedisplay();                    // Asks GLUT to redraw the screen
+  gmtl::invert(view_mat, cam_pose); // Updates view transform to reflect the change in camera transform
+  glutPostRedisplay();              // Asks GLUT to redraw the screen
 }
 
 //|____________________________________________________________________
@@ -291,7 +342,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
 void ReshapeFunc(int w, int h)
 {
   // Track the current window dimensions
-  w_width  = w;
+  w_width = w;
   w_height = h;
 }
 
@@ -308,20 +359,20 @@ void ReshapeFunc(int w, int h)
 void DrawCoordinateFrame(const float l)
 {
   glBegin(GL_LINES);
-    // X axis is red
-    glColor3f( 1.0f, 0.0f, 0.0f);
-    glVertex3f(0.0f, 0.0f, 0.0f);
-	  glVertex3f(   l, 0.0f, 0.0f);
+  // X axis is red
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertex3f(0.0f, 0.0f, 0.0f);
+  glVertex3f(l, 0.0f, 0.0f);
 
-    // Y axis is green
-    glColor3f( 0.0f, 1.0f, 0.0f);
-    glVertex3f(0.0f, 0.0f, 0.0f);
-	  glVertex3f(0.0f,    l, 0.0f);
+  // Y axis is green
+  glColor3f(0.0f, 1.0f, 0.0f);
+  glVertex3f(0.0f, 0.0f, 0.0f);
+  glVertex3f(0.0f, l, 0.0f);
 
-    // Z axis is blue
-    glColor3f( 0.0f, 0.0f, 1.0f);
-    glVertex3f(0.0f, 0.0f, 0.0f);
-	  glVertex3f(0.0f, 0.0f,    l);
+  // Z axis is blue
+  glColor3f(0.0f, 0.0f, 1.0f);
+  glVertex3f(0.0f, 0.0f, 0.0f);
+  glVertex3f(0.0f, 0.0f, l);
   glEnd();
 }
 
@@ -339,24 +390,61 @@ void DrawCoordinateFrame(const float l)
 
 void DrawPlane(const float width, const float length, const float height)
 {
-  float w = width/2;
-  float l = length/2;
-  
-  glBegin(GL_TRIANGLES);
-    // Body is red
-    glColor3f( 1.0f, 0.0f, 0.0f);
-    glVertex3f(0.0f, 0.0f,   l);
-	  glVertex3f(   w, 0.0f,  -l);
-	  glVertex3f(  -w, 0.0f,  -l);
+  float w = width / 2;
+  float l = length / 2;
+  float h = height / 2;
 
-    // Wing is blue
-    glColor3f( 0.0f,    0.0f, 1.0f);
-    glVertex3f(0.0f,    0.0f, 0.0f);
-	  glVertex3f(0.0f,    0.0f,   -l);
-	  glVertex3f(0.0f,  height,   -l);
+  glBegin(GL_QUADS);
+  glColor3f(1.0f, 0.0f, 0.0f);
+
+  glVertex3f(w / 2, h, l);
+  glVertex3f(-w / 2, h, l);
+  glVertex3f(-w / 2, -h, l);
+  glVertex3f(w / 2, -h, l);
+
+  glVertex3f(w / 2, h, -l);
+  glVertex3f(-w / 2, h, -l);
+  glVertex3f(-w / 2, -h, -l);
+  glVertex3f(w / 2, -h, -l);
+  // glBegin(GL_TRIANGLES);
+  // // Body is red
+  // glColor3f(1.0f, 0.0f, 0.0f);
+  // glVertex3f(0.0f, 0.0f, l);
+  // glVertex3f(w, 0.0f, -l);
+  // glVertex3f(-w, 0.0f, -l);
+
+  // // Wing is blue
+  // glColor3f(0.0f, 0.0f, 1.0f);
+  // glVertex3f(0.0f, 0.0f, 0.0f);
+  // glVertex3f(0.0f, 0.0f, -l);
+  // glVertex3f(0.0f, height, -l);
   glEnd();
 }
+void DrawPlane2()
+{
+  const float w = 1.5f;
+  const float h = 1.5f;
+  const float l = 3.0f;
+  float w2 = w / 2;
+  float h2 = h / 2;
+  float l2 = l / 2;
 
+  glBegin(GL_QUADS);
+  // Body is red
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertex3f(-1.0f, 0.0f, 0.0f);
+  glVertex3f(0.0f, 1.0f, 0.0f);
+  glVertex3f(1.0f, 0.0f, 0.0f);
+  glVertex3f(0.0f, -1.0f, 0.0f);
+
+  // Wing is blue
+  glColor3f(0.0f, 0.0f, 1.0f);
+  glVertex3f(0.0f, 0.0f, 0.0f);
+  glVertex3f(0.0f, 0.0f, -l);
+  glVertex3f(0.0f, h, -l);
+
+  glEnd();
+}
 //|____________________________________________________________________
 //|
 //| Function: main
@@ -368,23 +456,23 @@ void DrawPlane(const float width, const float length, const float height)
 //|____________________________________________________________________
 
 int main(int argc, char **argv)
-{ 
+{
   InitMatrices();
 
   glutInit(&argc, argv);
 
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(w_width, w_height);
-  
+
   glutCreateWindow("Plane Episode 1");
 
-  // glutDisplayFunc(DisplayFunc);
-  // glutReshapeFunc(ReshapeFunc);
-  // glutKeyboardFunc(KeyboardFunc);
-  
-  // InitGL();
+  glutDisplayFunc(DisplayFunc);
+  glutReshapeFunc(ReshapeFunc);
+  glutKeyboardFunc(KeyboardFunc);
 
-  // glutMainLoop();
+  InitGL();
+
+  glutMainLoop();
 
   return 0;
 }
