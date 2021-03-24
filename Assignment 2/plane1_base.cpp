@@ -441,18 +441,34 @@ void DrawPlane(const float width, const float length, const float height)
   glVertex3f(-w / 2, -h, l);
   glVertex3f(-w / 2, -h, -l);
 
-  // glBegin(GL_TRIANGLES);
-  // // Body is red
-  // glColor3f(1.0f, 0.0f, 0.0f);
-  // glVertex3f(0.0f, 0.0f, l);
-  // glVertex3f(w, 0.0f, -l);
-  // glVertex3f(-w, 0.0f, -l);
+  //Top
+  glColor3f(1.0f, 0.0f, 1.0f);
+  glVertex3f(w / 2, h, -l);
+  glVertex3f(-w / 2, h, -l);
+  glVertex3f(-w / 2, h, l);
+  glVertex3f(w / 2, h, l);
 
-  // // Wing is blue
-  // glColor3f(0.0f, 0.0f, 1.0f);
-  // glVertex3f(0.0f, 0.0f, 0.0f);
-  // glVertex3f(0.0f, 0.0f, -l);
-  // glVertex3f(0.0f, height, -l);
+  //Bottom
+  glColor3f(1.0f, 0.0f, 1.0f);
+  glVertex3f(w / 2, -h, -l);
+  glVertex3f(-w / 2, -h, -l);
+  glVertex3f(-w / 2, -h, l);
+  glVertex3f(w / 2, -h, l);
+
+  glEnd();
+
+  glBegin(GL_TRIANGLES);
+  // Body is red
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertex3f(0.0f, 0.0f, l);
+  glVertex3f(w*2, 0.0f, -l);
+  glVertex3f(-w*2, 0.0f, -l);
+
+  // Wing is blue
+  glColor3f(0.0f, 0.0f, 1.0f);
+  glVertex3f(0.0f, 0.0f, 0.0f);
+  glVertex3f(0.0f, 0.0f, -l);
+  glVertex3f(0.0f, height*1.5, -l);
   glEnd();
 }
 void DrawPlane2()
