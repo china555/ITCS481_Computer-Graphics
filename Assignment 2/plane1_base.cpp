@@ -30,6 +30,8 @@
 
 #include <GL/glut.h>
 #include <windows.h>
+#include <iostream>
+using namespace std;
 
 //|___________________
 //|
@@ -63,6 +65,8 @@ gmtl::Matrix44f view_mat; // View transform is C^-1 (inverse of the camera trans
 // Transformation matrices applied to plane and camera poses
 gmtl::Matrix44f ztransp_mat;
 gmtl::Matrix44f ztransn_mat;
+gmtl::Matrix44f xtransp_mat;
+gmtl::Matrix44f xtransn_mat;
 gmtl::Matrix44f zrotp_mat;
 gmtl::Matrix44f zrotn_mat;
 gmtl::Matrix44f xrotp_mat;
@@ -112,6 +116,14 @@ void InitMatrices()
 
   gmtl::invert(ztransn_mat, ztransp_mat);
 
+  // Positive X-Translation
+  xtransp_mat.set(1, 0, 0, TRANS_AMOUNT,
+                  0, 1, 0, 0,
+                  0, 0, 1, 0,
+                  0, 0, 0, 1);
+  xtransp_mat.setState(gmtl::Matrix44f::TRANS);
+
+  gmtl::invert(xtransn_mat, xtransp_mat);
   // Positive Z-rotation (roll)
   zrotp_mat.set(COSTHETA, -SINTHETA, 0, 0,
                 SINTHETA, COSTHETA, 0, 0,
@@ -262,21 +274,23 @@ void DisplayFunc(void)
 //|____________________________________________________________________
 void SpecialKeys(int key, int x, int y)
 {
+  // cout << key;
   switch (key)
   {
   case GLUT_KEY_LEFT:
-    plane_pose = plane_pose * yrotp_mat;
+    plane_pose = plane_pose * xtransn_mat;
     break;
-    // case GLUT_KEY_RIGHT:
-    //   doSomething();
-    //   break;
-    // case GLUT_KEY_UP:
-    //   doSomething();
-    //   break;
-    // case GLUT_KEY_DOWN:
-    //   doSomething();
-    //   break;
+  case GLUT_KEY_RIGHT:
+    plane_pose = plane_pose * xtransp_mat;
+    break;
+  case GLUT_KEY_UP:
+    plane_pose = plane_pose * ztransn_mat;
+    break;
+  case GLUT_KEY_DOWN:
+    plane_pose = plane_pose * ztransp_mat;
+    break;
   }
+  glutPostRedisplay();
 }
 void KeyboardFunc(unsigned char key, int x, int y)
 {
@@ -287,27 +301,34 @@ void KeyboardFunc(unsigned char key, int x, int y)
     //| Plane controls
     //|____________________________________________________________________
 
-  case 's': // Forward translation of the plane (positive Z-translation)
+  case 'n': // Forward translation of the plane (positive Z-translation)
     plane_pose = plane_pose * ztransp_mat;
     break;
   case 'f': // Backward translation of the plane
     plane_pose = plane_pose * ztransn_mat;
     break;
 
-  case 'e': // Rolls the plane (+ Z-rot)
+  case 'q': // Rolls the plane (+ Z-rot)
     plane_pose = plane_pose * zrotp_mat;
     break;
-  case 'q': // Rolls the plane (- Z-rot)
+  case 'e': // Rolls the plane (- Z-rot)
     plane_pose = plane_pose * zrotn_mat;
     break;
   case 'w': // Rolls the plane (+ X-rot)
     plane_pose = plane_pose * xrotp_mat;
     break;
-  case 'd': // Rolls the plane (- Y-rot)
+  case 's': // Rolls the plane - X-rot)
+    plane_pose = plane_pose * xrotn_mat;
+    break;
+  case 'a': // Rolls the plane (+ Y-rot)
     plane_pose = plane_pose * yrotp_mat;
+    break;
+  case 'd': // Rolls the plane (- Y-rot)
+    plane_pose = plane_pose * yrotn_mat;
     break;
   default:
     glutSpecialFunc(SpecialKeys);
+    break;
 
     // TODO: Add the remaining controls/transforms
     //|____________________________________________________________________
@@ -396,16 +417,30 @@ void DrawPlane(const float width, const float length, const float height)
 
   glBegin(GL_QUADS);
   glColor3f(1.0f, 0.0f, 0.0f);
-
+  //front
   glVertex3f(w / 2, h, l);
   glVertex3f(-w / 2, h, l);
   glVertex3f(-w / 2, -h, l);
   glVertex3f(w / 2, -h, l);
-
+  //back
   glVertex3f(w / 2, h, -l);
-  glVertex3f(-w / 2, h, -l);
-  glVertex3f(-w / 2, -h, -l);
   glVertex3f(w / 2, -h, -l);
+  glVertex3f(-w / 2, -h, -l);
+  glVertex3f(-w / 2, h, -l);
+  //Right
+  glColor3f(0.0f, 1.0f, 0.0f);
+  glVertex3f(w / 2, h, -l);
+  glVertex3f(w / 2, h, l);
+  glVertex3f(w / 2, -h, l);
+  glVertex3f(w / 2, -h, -l);
+
+  //LEFT
+  glColor3f(0.0f, 1.0f, 0.0f);
+  glVertex3f(-w / 2, h, -l);
+  glVertex3f(-w / 2, h, l);
+  glVertex3f(-w / 2, -h, l);
+  glVertex3f(-w / 2, -h, -l);
+
   // glBegin(GL_TRIANGLES);
   // // Body is red
   // glColor3f(1.0f, 0.0f, 0.0f);
