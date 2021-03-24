@@ -135,7 +135,7 @@ void InitMatrices()
   ytransp_mat.setState(gmtl::Matrix44f::TRANS);
 
   gmtl::invert(ytransn_mat, ytransp_mat);
-  
+
   // Positive Z-rotation (roll)
   zrotp_mat.set(COSTHETA, -SINTHETA, 0, 0,
                 SINTHETA, COSTHETA, 0, 0,
@@ -268,8 +268,8 @@ void DisplayFunc(void)
   glLoadIdentity();
   gluPerspective(CAM_FOV, (float)w_width / (2 * w_height), 0.1f, 100.0f);
 
-  // glMatrixMode(GL_MODELVIEW);
-  // glLoadIdentity();
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
   // ...
 
   glFlush();
