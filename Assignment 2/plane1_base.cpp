@@ -493,6 +493,7 @@ void DrawPlane(const float width, const float length, const float height)
   glVertex3f(0.0f, height * 1.5, -l);
   glEnd();
 }
+
 void DrawPlane2()
 {
   const float w = 1.5f;
