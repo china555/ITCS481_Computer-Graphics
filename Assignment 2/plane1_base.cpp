@@ -514,120 +514,132 @@ void DrawPlane2()
 
   glBegin(GL_QUADS);
   //right
+  glColor3f(0.6f, 0.6f, 0.6f);
   //Red
   glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(w / 2, h / 2, -l);
   //Green
-  glColor3f(0.0f, 1.0f, 0.0f);
+  // glColor3f(0.0f, 1.0f, 0.0f);
   glVertex3f(w / 2, h / 2, l);
   //Blue
-  glColor3f(0.0f, 0.0f, 1.0f);
+  // glColor3f(0.0f, 0.0f, 1.0f);
   glVertex3f(w / 2, -h / 2, l);
   //White
-  glColor3f(1.0f, 1.0f, 1.0f);
+  // glColor3f(1.0f, 1.0f, 1.0f);
   glVertex3f(w / 2, -h / 2, -l);
 
   //Top
+  glColor3f(0.0f, 1.0f, 0.0f);
   //Red
-  glColor3f(1.0f, 0.0f, 0.0f);
+  // glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(w / 4, h, -l);
   //Green
-  glColor3f(0.0f, 1.0f, 0.0f);
+  // glColor3f(0.0f, 1.0f, 0.0f);
   glVertex3f(-w / 4, h, -l);
   //Blue
-  glColor3f(0.0f, 0.0f, 1.0f);
+  // glColor3f(0.0f, 0.0f, 1.0f);
   glVertex3f(-w / 4, h, l);
   //White
-  glColor3f(1.0f, 1.0f, 1.0f);
+  // glColor3f(1.0f, 1.0f, 1.0f);
   glVertex3f(w / 4, h, l);
 
   //lower
-  glColor3f(1.0f, 0.0f, 0.0f);
+  glColor3f(0.1f, 0.1f, 0.1f);
+  // glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(w / 4, -h, -l);
-  glColor3f(0.0f, 1.0f, 0.0f);
+  // glColor3f(0.0f, 1.0f, 0.0f);
   glVertex3f(-w / 4, -h, -l);
-  glColor3f(0.0f, 0.0f, 1.0f);
+  // glColor3f(0.0f, 0.0f, 1.0f);
   glVertex3f(-w / 4, -h, l);
-  glColor3f(1.0f, 1.0f, 1.0f);
+  // glColor3f(1.0f, 1.0f, 1.0f);
   glVertex3f(w / 4, -h, l);
 
   //left
+  glColor3f(0.2f, 0.2f, 0.2f);
   //Red
-  glColor3f(1.0f, 0.0f, 0.0f);
+  // glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(-w / 2, h / 2, -l);
   //Green
-  glColor3f(0.0f, 1.0f, 0.0f);
+  // glColor3f(0.0f, 1.0f, 0.0f);
   glVertex3f(-w / 2, h / 2, l);
   //Blue
-  glColor3f(0.0f, 0.0f, 1.0f);
+  // glColor3f(0.0f, 0.0f, 1.0f);
   glVertex3f(-w / 2, -h / 2, l);
   //White
-  glColor3f(1.0f, 1.0f, 1.0f);
+  // glColor3f(1.0f, 1.0f, 1.0f);
   glVertex3f(-w / 2, -h / 2, -l);
 
   //upper right
+  glColor3f(1.0f, 0.5f, 0.1f);
+
   //Red
-  glColor3f(1.0f, 0.0f, 0.0f);
+  // glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(w / 4, h, -l);
   //Green
-  glColor3f(0.0f, 1.0f, 0.0f);
+  // glColor3f(0.0f, 1.0f, 0.0f);
   glVertex3f(w / 4, h, l);
   //Blue
-  glColor3f(0.0f, 0.0f, 1.0f);
+  // glColor3f(0.0f, 0.0f, 1.0f);
   glVertex3f(w / 2, h / 2, l);
   //White
-  glColor3f(1.0f, 1.0f, 1.0f);
+  // glColor3f(1.0f, 1.0f, 1.0f);
   glVertex3f(w / 2, h / 2, -l);
 
   //upper left
+  glColor3f(1.0f, 0.1f, 0.5f);
   //Red
-  glColor3f(1.0f, 0.0f, 0.0f);
+  // glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(-w / 4, h, -l);
   //Green
-  glColor3f(0.0f, 1.0f, 0.0f);
+  // glColor3f(0.0f, 1.0f, 0.0f);
   glVertex3f(-w / 4, h, l);
   //Blue
-  glColor3f(0.0f, 0.0f, 1.0f);
+  // glColor3f(0.0f, 0.0f, 1.0f);
   glVertex3f(-w / 2, h / 2, l);
   //White
-  glColor3f(1.0f, 1.0f, 1.0f);
+  // glColor3f(1.0f, 1.0f, 1.0f);
   glVertex3f(-w / 2, h / 2, -l);
 
   //lower right
+  glColor3f(0.1f, 1.0f, 0.5f);
+
   //Red
-  glColor3f(1.0f, 0.0f, 0.0f);
+  // glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(w / 2, -h / 2, -l);
   //Green
-  glColor3f(0.0f, 1.0f, 0.0f);
+  // glColor3f(0.0f, 1.0f, 0.0f);
   glVertex3f(w / 2, -h / 2, l);
   //Blue
-  glColor3f(0.0f, 0.0f, 1.0f);
+  // glColor3f(0.0f, 0.0f, 1.0f);
   glVertex3f(w / 4, -h, l);
   //White
-  glColor3f(1.0f, 1.0f, 1.0f);
+  // glColor3f(1.0f, 1.0f, 1.0f);
   glVertex3f(w / 4, -h, -l);
 
   //lower left
+  glColor3f(0.5f, 1.0f, 0.1f);
+
   //Red
-  glColor3f(1.0f, 0.0f, 0.0f);
+  // glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(-w / 2, -h / 2, -l);
   //Green
-  glColor3f(0.0f, 1.0f, 0.0f);
+  // glColor3f(0.0f, 1.0f, 0.0f);
   glVertex3f(-w / 2, -h / 2, l);
   //Blue
-  glColor3f(0.0f, 0.0f, 1.0f);
+  // glColor3f(0.0f, 0.0f, 1.0f);
   glVertex3f(-w / 4, -h, l);
   //White
-  glColor3f(1.0f, 1.0f, 1.0f);
+  // glColor3f(1.0f, 1.0f, 1.0f);
   glVertex3f(-w / 4, -h, -l);
 
-  //upper slope window
+  //upper center slope window
+
   //Red
   glColor3f(1.0f, 0.0f, 0.0f);
-  glVertex3f(w / 4, -h / 2, -l * 1.6);
+  glVertex3f(w / 4, h / 4, -l * 1.4);
   //Green
   glColor3f(0.0f, 1.0f, 0.0f);
-  glVertex3f(-w / 4, -h / 2, -l * 1.6);
+  glVertex3f(-w / 4, h / 4, -l * 1.4);
   //Blue
   glColor3f(0.0f, 0.0f, 1.0f);
   glVertex3f(-w / 4, h, -l);
@@ -637,8 +649,8 @@ void DrawPlane2()
 
   //upper right slope window
   //Red
-  glColor3f(1.0f, 0.0f, 0.0f);
-  glVertex3f(w / 4, -h / 2, -l * 1.6);
+  glColor3f(1.0f, 1.0f, 0.0f);
+  glVertex3f(w / 4, h / 4, -l * 1.4);
   //Green
   glColor3f(0.0f, 1.0f, 0.0f);
   glVertex3f(w / 4, h, -l);
@@ -647,12 +659,12 @@ void DrawPlane2()
   glVertex3f(w / 2, h / 2, -l);
   //White
   glColor3f(1.0f, 1.0f, 1.0f);
-  glVertex3f(w / 2, -h / 2, -l);
+  glVertex3f(w / 2, h / 4, -l);
 
   //upper left slope window
   //Red
   glColor3f(1.0f, 0.0f, 0.0f);
-  glVertex3f(-w / 4, -h / 2, -l * 1.6);
+  glVertex3f(-w / 4, h / 4, -l * 1.4);
   //Green
   glColor3f(0.0f, 1.0f, 0.0f);
   glVertex3f(-w / 4, h, -l);
@@ -661,7 +673,107 @@ void DrawPlane2()
   glVertex3f(-w / 2, h / 2, -l);
   //White
   glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(-w / 2, h / 4, -l);
+
+  //lower right slope window
+  //Red
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertex3f(w / 4, -h / 2, -l * 1.6);
+  //Green
+  glColor3f(0.0f, 1.0f, 0.0f);
+  glVertex3f(w / 2, -h / 2, -l);
+  //Blue
+  glColor3f(0.0f, 0.0f, 1.0f);
+  glVertex3f(w / 4, -h, -l);
+  //White
+  glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(w / 4, -h, -l * 1.6);
+
+  //lower left slope window
+  //Red
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertex3f(-w / 4, -h / 2, -l * 1.6);
+  //Green
+  glColor3f(0.0f, 1.0f, 0.0f);
   glVertex3f(-w / 2, -h / 2, -l);
+  //Blue
+  glColor3f(0.0f, 0.0f, 1.0f);
+  glVertex3f(-w / 4, -h, -l);
+  //White
+  glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(-w / 4, -h, -l * 1.6);
+
+  //lower center slope window
+
+  //Red
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertex3f(w / 4, -h / 2, -l * 1.6);
+  //Green
+  glColor3f(0.0f, 1.0f, 0.0f);
+  glVertex3f(-w / 4, -h / 2, -l * 1.6);
+  //Blue
+  glColor3f(0.0f, 0.0f, 1.0f);
+  glVertex3f(-w / 4, -h, -l * 1.6);
+  //White
+  glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(w / 4, -h, -l * 1.6);
+
+  //lower  slope window
+  //Red
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertex3f(w / 4, -h, -l * 1.6);
+  //Green
+  glColor3f(0.0f, 1.0f, 0.0f);
+  glVertex3f(w / 4, -h, -l);
+  //Blue
+  glColor3f(0.0f, 0.0f, 1.0f);
+  glVertex3f(-w / 4, -h, -l);
+  //White
+  glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(-w / 4, -h, -l * 1.6);
+
+  //lower center right slope window
+  //Red
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertex3f(w / 2, -h / 2, -l);
+  //Green
+  glColor3f(0.0f, 1.0f, 0.0f);
+  glVertex3f(w / 4, -h / 2, -l * 1.6);
+  //Blue
+  glColor3f(0.0f, 0.0f, 1.0f);
+  glVertex3f(w / 4, h / 4, -l * 1.4);
+  //White
+  glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(w / 2, h / 4, -l);
+
+  //lower center left slope window
+  //Red
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertex3f(-w / 2, -h / 2, -l);
+  //Green
+  glColor3f(0.0f, 1.0f, 0.0f);
+  glVertex3f(-w / 4, -h / 2, -l * 1.6);
+  //Blue
+  glColor3f(0.0f, 0.0f, 1.0f);
+  glVertex3f(-w / 4, h / 4, -l * 1.4);
+  //White
+  glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(-w / 2, h / 4, -l);
+
+  //center center slope window
+
+  //Red
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertex3f(w / 4, h / 4, -l * 1.4);
+  //Green
+  glColor3f(0.0f, 1.0f, 0.0f);
+  glVertex3f(-w / 4, h / 4, -l * 1.4);
+  //Blue
+  glColor3f(0.0f, 0.0f, 1.0f);
+  glVertex3f(-w / 4, -h / 2, -l * 1.4);
+  //White
+  glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(-w / 4, -h, -l * 1.4);
   glEnd();
 }
 //|____________________________________________________________________
