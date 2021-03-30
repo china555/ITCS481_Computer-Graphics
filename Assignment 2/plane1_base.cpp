@@ -764,16 +764,17 @@ void DrawPlane2()
 
   //Red
   glColor3f(1.0f, 0.0f, 0.0f);
-  glVertex3f(w / 4, h / 4, -l * 1.4);
+  glVertex3f(w / 4, -h / 2, -l * 1.6);
   //Green
   glColor3f(0.0f, 1.0f, 0.0f);
-  glVertex3f(-w / 4, h / 4, -l * 1.4);
+  glVertex3f(w / 4, h / 4, -l * 1.4);
   //Blue
   glColor3f(0.0f, 0.0f, 1.0f);
-  glVertex3f(-w / 4, -h / 2, -l * 1.4);
+  glVertex3f(-w / 4, h / 4, -l * 1.4);
   //White
   glColor3f(1.0f, 1.0f, 1.0f);
-  glVertex3f(-w / 4, -h, -l * 1.4);
+  glVertex3f(-w / 4, -h / 2, -l * 1.6);
+
   glEnd();
 }
 //|____________________________________________________________________
