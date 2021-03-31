@@ -513,6 +513,7 @@ void DrawPlane2()
   // glEnd();
 
   glBegin(GL_QUADS);
+  /*
   //right
   glColor3f(0.6f, 0.6f, 0.6f);
   //Red
@@ -828,6 +829,20 @@ void DrawPlane2()
   //White
   glColor3f(1.0f, 1.0f, 1.0f);
   glVertex3f(-w / 4, h / 4, -l * 1.4);
+*/
+  ////////////////////////////Wing//////////////////////////////
+  //Red
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertex3f(w / 4, h / 4, -l);
+  //Green
+  glColor3f(0.0f, 1.0f, 0.0f);
+  glVertex3f(w / 4, -h, -l);
+  //Blue
+  glColor3f(0.0f, 0.0f, 1.0f);
+  glVertex3f(-w / 4, -0.2f, -l);
+  //White
+  glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(-w / 4, h / 4, -l);
   glEnd();
 }
 //|____________________________________________________________________
