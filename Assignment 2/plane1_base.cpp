@@ -499,115 +499,61 @@ void DrawPlane2()
   const float w = 3.0f;
   const float h = 1.5f;
   const float l = 3.0f;
-  float w2 = w / 2;
-  float h2 = h / 2;
-  float l2 = l / 2;
 
   glBegin(GL_QUADS);
-
+  ////////////////////////////////////////BODY///////////////////////////////////////////////
+  glColor3f(0.9f, 0.9f, 0.9f);
   //right
-  glColor3f(0.6f, 0.6f, 0.6f);
-  //Red
-  glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(w / 2, h / 2, -l);
-  //Green
-  // glColor3f(0.0f, 1.0f, 0.0f);
-  glVertex3f(w / 2, h / 2, l);
-  //Blue
-  // glColor3f(0.0f, 0.0f, 1.0f);
-  glVertex3f(w / 2, -h / 2, l);
-  //White
-  // glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(w / 2, h / 2, l / 2);
+  glVertex3f(w / 2, -h / 2, l / 2);
   glVertex3f(w / 2, -h / 2, -l);
 
   //Top
-  glColor3f(0.0f, 1.0f, 0.0f);
-  //Red
-  // glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(w / 4, h, -l);
-  //Green
-  // glColor3f(0.0f, 1.0f, 0.0f);
   glVertex3f(-w / 4, h, -l);
-  //Blue
-  // glColor3f(0.0f, 0.0f, 1.0f);
-  glVertex3f(-w / 4, h, l);
-  //White
-  // glColor3f(1.0f, 1.0f, 1.0f);
-  glVertex3f(w / 4, h, l);
-
-  //lower
-  glColor3f(0.1f, 0.1f, 0.1f);
-  // glColor3f(1.0f, 0.0f, 0.0f);
-  glVertex3f(w / 4, -h, -l);
-  // glColor3f(0.0f, 1.0f, 0.0f);
-  glVertex3f(-w / 4, -h, -l);
-  // glColor3f(0.0f, 0.0f, 1.0f);
-  glVertex3f(-w / 4, -h, l);
-  // glColor3f(1.0f, 1.0f, 1.0f);
-  glVertex3f(w / 4, -h, l);
+  glVertex3f(-w / 4, h, l / 2);
+  glVertex3f(w / 4, h, l / 2);
 
   //left
-  glColor3f(0.2f, 0.2f, 0.2f);
-  //Red
-  // glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(-w / 2, h / 2, -l);
-  //Green
-  // glColor3f(0.0f, 1.0f, 0.0f);
-  glVertex3f(-w / 2, h / 2, l);
-  //Blue
-  // glColor3f(0.0f, 0.0f, 1.0f);
-  glVertex3f(-w / 2, -h / 2, l);
-  //White
-  // glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(-w / 2, h / 2, l / 2);
+  glVertex3f(-w / 2, -h / 2, l / 2);
   glVertex3f(-w / 2, -h / 2, -l);
 
   //upper right
-  glColor3f(1.0f, 0.5f, 0.1f);
-
-  //Red
-  // glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(w / 4, h, -l);
-  //Green
-  // glColor3f(0.0f, 1.0f, 0.0f);
-  glVertex3f(w / 4, h, l);
-  //Blue
-  // glColor3f(0.0f, 0.0f, 1.0f);
-  glVertex3f(w / 2, h / 2, l);
-  //White
-  // glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(w / 4, h, l / 2);
+  glVertex3f(w / 2, h / 2, l / 2);
   glVertex3f(w / 2, h / 2, -l);
 
   //upper left
-  glColor3f(1.0f, 0.1f, 0.5f);
-  //Red
-  // glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(-w / 4, h, -l);
-  //Green
-  // glColor3f(0.0f, 1.0f, 0.0f);
-  glVertex3f(-w / 4, h, l);
-  //Blue
-  // glColor3f(0.0f, 0.0f, 1.0f);
-  glVertex3f(-w / 2, h / 2, l);
-  //White
-  // glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(-w / 4, h, l / 2);
+  glVertex3f(-w / 2, h / 2, l / 2);
   glVertex3f(-w / 2, h / 2, -l);
 
-  glColor3f(0.1f, 1.0f, 0.5f);
+  glColor3f(0.8f, 0.0f, 0.2f);
+  //lower left
+  glVertex3f(-w / 2, -h / 2, -l);
+  glVertex3f(-w / 2, -h / 2, l / 2);
+  glVertex3f(-w / 4, -h, l / 2);
+  glVertex3f(-w / 4, -h, -l);
 
   //lower right
   glVertex3f(w / 2, -h / 2, -l);
-  glVertex3f(w / 2, -h / 2, l);
-  glVertex3f(w / 4, -h, l);
+  glVertex3f(w / 2, -h / 2, l / 2);
+  glVertex3f(w / 4, -h, l / 2);
   glVertex3f(w / 4, -h, -l);
 
-  glColor3f(0.5f, 1.0f, 0.1f);
-  //lower left
-  glVertex3f(-w / 2, -h / 2, -l);
-  glVertex3f(-w / 2, -h / 2, l);
-  glVertex3f(-w / 4, -h, l);
+  //lower
+  glVertex3f(w / 4, -h, -l);
   glVertex3f(-w / 4, -h, -l);
+  glVertex3f(-w / 4, -h, l / 2);
+  glVertex3f(w / 4, -h, l / 2);
+  /////////////////////////////////////////////////////////////////////////////////////////////
 
-  //////////////////////Window///////////////////////////////////
+  //////////////////////////////////////////Window////////////////////////////////////////////
   glColor3f(0.6f, 0.7f, 0.7f);
 
   //upper center slope window
@@ -666,6 +612,7 @@ void DrawPlane2()
   glVertex3f(-w / 2, h / 4, -l);
 
   //center center slope window
+  glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(w / 4, -0.2f, -l * 2);
   glVertex3f(w / 4, h / 4, -l * 1.4);
   glVertex3f(-w / 4, h / 4, -l * 1.4);
@@ -712,13 +659,202 @@ void DrawPlane2()
   glVertex3f(0.75f, h, -0.5f);
   glVertex3f(w * 3, h, -0.7f);
 
+  glVertex3f(w * 3, h + 0.01, -1.5);
+  glVertex3f(0.75f, h + 0.01, -l);
+  glVertex3f(0.75f, h + 0.01, -0.5f);
+  glVertex3f(w * 3, h + 0.01, -0.7f);
+
+  glVertex3f(w * 3, h + 0.02, -1.5);
+  glVertex3f(0.75f, h + 0.02, -l);
+  glVertex3f(0.75f, h + 0.02, -0.5f);
+  glVertex3f(w * 3, h + 0.02, -0.7f);
+
+  glVertex3f(w * 3, h + 0.03, -1.5);
+  glVertex3f(0.75f, h + 0.03, -l);
+  glVertex3f(0.75f, h + 0.03, -0.5f);
+  glVertex3f(w * 3, h + 0.03, -0.7f);
+
+  glVertex3f(w * 3, h - 0.01, -1.5);
+  glVertex3f(0.75f, h - 0.01, -l);
+  glVertex3f(0.75f, h - 0.01, -0.5f);
+  glVertex3f(w * 3, h - 0.01, -0.7f);
+
+  glVertex3f(w * 3, h - 0.02, -1.5);
+  glVertex3f(0.75f, h - 0.02, -l);
+  glVertex3f(0.75f, h - 0.02, -0.5f);
+  glVertex3f(w * 3, h - 0.02, -0.7f);
+
+  glVertex3f(w * 3, h - 0.03, -1.5);
+  glVertex3f(0.75f, h - 0.03, -l);
+  glVertex3f(0.75f, h - 0.03, -0.5f);
+  glVertex3f(w * 3, h - 0.03, -0.7f);
+
   //Left
   glVertex3f(-w * 3, h, -1.5);
   glVertex3f(-0.75f, h, -l);
   glVertex3f(-0.75f, h, -0.5f);
   glVertex3f(-w * 3, h, -0.7f);
 
+  glVertex3f(-w * 3, h + 0.01, -1.5);
+  glVertex3f(-0.75f, h + 0.01, -l);
+  glVertex3f(-0.75f, h + 0.01, -0.5f);
+  glVertex3f(-w * 3, h + 0.01, -0.7f);
+
+  glVertex3f(-w * 3, h + 0.02, -1.5);
+  glVertex3f(-0.75f, h + 0.02, -l);
+  glVertex3f(-0.75f, h + 0.02, -0.5f);
+  glVertex3f(-w * 3, h + 0.02, -0.7f);
+
+  glVertex3f(-w * 3, h + 0.03, -1.5);
+  glVertex3f(-0.75f, h + 0.03, -l);
+  glVertex3f(-0.75f, h + 0.03, -0.5f);
+  glVertex3f(-w * 3, h + 0.03, -0.7f);
+
+  glVertex3f(-w * 3, h - 0.01, -1.5);
+  glVertex3f(-0.75f, h - 0.01, -l);
+  glVertex3f(-0.75f, h - 0.01, -0.5f);
+  glVertex3f(-w * 3, h - 0.01, -0.7f);
+
+  glVertex3f(-w * 3, h - 0.02, -1.5);
+  glVertex3f(-0.75f, h - 0.02, -l);
+  glVertex3f(-0.75f, h - 0.02, -0.5f);
+  glVertex3f(-w * 3, h - 0.02, -0.7f);
+
+  glVertex3f(-w * 3, h - 0.03, -1.5);
+  glVertex3f(-0.75f, h - 0.03, -l);
+  glVertex3f(-0.75f, h - 0.03, -0.5f);
+  glVertex3f(-w * 3, h - 0.03, -0.7f);
+
+  ////////////////////////////////////////TailWing///////////////////////////////////////////////
+  glColor3f(0.8f, 0.0f, 0.2f);
+
+  //Top
+  glVertex3f(0, h * 2.2, l * 1.5);
+  glVertex3f(0, h * 2.0, l);
+  glVertex3f(0, h / 2, l * 0.9);
+  glVertex3f(0, h / 4, l * 1.5);
+
+  glVertex3f(0.01, h * 2.2, l * 1.5);
+  glVertex3f(0.01, h * 2.0, l);
+  glVertex3f(0.01, h / 2, l * 0.9);
+  glVertex3f(0.01, h / 4, l * 1.5);
+
+  glVertex3f(0.02, h * 2.2, l * 1.5);
+  glVertex3f(0.02, h * 2.0, l);
+  glVertex3f(0.02, h / 2, l * 0.9);
+  glVertex3f(0.02, h / 4, l * 1.5);
+
+  glVertex3f(-0.01, h * 2.2, l * 1.5);
+  glVertex3f(-0.01, h * 2.0, l);
+  glVertex3f(-0.01, h / 2, l * 0.9);
+  glVertex3f(-0.01, h / 4, l * 1.5);
+
+  glVertex3f(-0.02, h * 2.2, l * 1.5);
+  glVertex3f(-0.02, h * 2.0, l);
+  glVertex3f(-0.02, h / 2, l * 0.9);
+  glVertex3f(-0.02, h / 4, l * 1.5);
+
+  //////////////////////////////////////Right////////////////////////////////////
+  glVertex3f(w, h / 4, l * 1.5);
+  glVertex3f(w, h / 4, l);
+  glVertex3f(0, h / 4, l * 0.9);
+  glVertex3f(0, h / 4, l * 1.5);
+
+  glVertex3f(w, (h / 4) + 0.01, l * 1.5);
+  glVertex3f(w, (h / 4) + 0.01, l);
+  glVertex3f(0, (h / 4) + 0.01, l * 0.9);
+  glVertex3f(0, (h / 4) + 0.01, l * 1.5);
+
+  glVertex3f(w, (h / 4) + 0.02, l * 1.5);
+  glVertex3f(w, (h / 4) + 0.02, l);
+  glVertex3f(0, (h / 4) + 0.02, l * 0.9);
+  glVertex3f(0, (h / 4) + 0.02, l * 1.5);
+
+  glVertex3f(w, (h / 4) - 0.01, l * 1.5);
+  glVertex3f(w, (h / 4) - 0.01, l);
+  glVertex3f(0, (h / 4) - 0.01, l * 0.9);
+  glVertex3f(0, (h / 4) - 0.01, l * 1.5);
+
+  glVertex3f(w, (h / 4) - 0.02, l * 1.5);
+  glVertex3f(w, (h / 4) - 0.02, l);
+  glVertex3f(0, (h / 4) - 0.02, l * 0.9);
+  glVertex3f(0, (h / 4) - 0.02, l * 1.5);
+
+  //////////////////////////////////////Left////////////////////////////////////
+  glVertex3f(-w, h / 4, l * 1.5);
+  glVertex3f(-w, h / 4, l);
+  glVertex3f(0, h / 4, l * 0.9);
+  glVertex3f(0, h / 4, l * 1.5);
+
+  glVertex3f(-w, (h / 4) + 0.01, l * 1.5);
+  glVertex3f(-w, (h / 4) + 0.01, l);
+  glVertex3f(0, (h / 4) + 0.01, l * 0.9);
+  glVertex3f(0, (h / 4) + 0.01, l * 1.5);
+
+  glVertex3f(-w, (h / 4) + 0.02, l * 1.5);
+  glVertex3f(-w, (h / 4) + 0.02, l);
+  glVertex3f(0, (h / 4) + 0.02, l * 0.9);
+  glVertex3f(0, (h / 4) + 0.02, l * 1.5);
+
+  glVertex3f(-w, (h / 4) - 0.01, l * 1.5);
+  glVertex3f(-w, (h / 4) - 0.01, l);
+  glVertex3f(0, (h / 4) - 0.01, l * 0.9);
+  glVertex3f(0, (h / 4) - 0.01, l * 1.5);
+
+  glVertex3f(-w, (h / 4) - 0.02, l * 1.5);
+  glVertex3f(-w, (h / 4) - 0.02, l);
+  glVertex3f(0, (h / 4) - 0.02, l * 0.9);
+  glVertex3f(0, (h / 4) - 0.02, l * 1.5);
+
   glEnd();
+  //////////////////////////////////////////////////////////////////////////////////////////////
+
+  ////////////////////////////////////////Tail///////////////////////////////////////////////
+  glBegin(GL_TRIANGLES);
+  glColor3f(0.9f, 0.9f, 0.9f);
+  //top
+  glVertex3f(w / 4, h, l / 2);
+  glVertex3f(-w / 4, h, l / 2);
+  glVertex3f((-w / 4 + w / 4) / 2, h / 4, l * 1.5);
+
+  //right
+  glVertex3f(0, 0.38, l * 1.5);
+  glVertex3f(w / 2, h / 2, l / 2);
+  glVertex3f(w / 2, -h / 2, l / 2);
+
+  //upper right
+  glVertex3f(0, h / 4, l * 1.5);
+  glVertex3f(w / 4, h, l / 2);
+  glVertex3f(w / 2, h / 2, l / 2);
+
+  // //left
+  glVertex3f(0, 0.38, l * 1.5);
+  glVertex3f(-w / 2, h / 2, l / 2);
+  glVertex3f(-w / 2, -h / 2, l / 2);
+
+  // //upper left
+  glVertex3f(0, h / 4, l * 1.5);
+  glVertex3f(-w / 4, h, l / 2);
+  glVertex3f(-w / 2, h / 2, l / 2);
+
+  glColor3f(0.8f, 0.0f, 0.2f);
+  //lower right
+  glVertex3f(0, h / 3.9, l * 1.5);
+  glVertex3f(w / 4, -h, l / 2);
+  glVertex3f(w / 2, -h / 2, l / 2);
+
+  // //lower
+  glVertex3f(w / 4, -h, l / 2);
+  glVertex3f(-w / 4, -h, l / 2);
+  glVertex3f((-w / 4 + w / 4) / 2, h / 4, l * 1.5);
+
+  // //lower left
+  glVertex3f(0, h / 3.9, l * 1.5);
+  glVertex3f(-w / 4, -h, l / 2);
+  glVertex3f(-w / 2, -h / 2, l / 2);
+
+  glEnd();
+  /////////////////////////////////////////////////////////////////////////////////////////////
 }
 //|____________________________________________________________________
 //|
