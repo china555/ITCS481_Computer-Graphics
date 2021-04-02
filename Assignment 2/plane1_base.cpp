@@ -612,13 +612,9 @@ void DrawPlane2()
   glVertex3f(-w / 2, h / 4, -l);
 
   //center center slope window
-  glColor3f(1.0f, 0.0f, 0.0f);
   glVertex3f(w / 4, -0.2f, -l * 2);
-  glColor3f(0.0f, 1.0f, 0.0f);
   glVertex3f(w / 4, h / 4, -l * 1.4);
-  glColor3f(0.0f, 0.0f, 1.0f);
   glVertex3f(-w / 4, h / 4, -l * 1.4);
-  glColor3f(1.0f, 1.0f, 1.0f);
   glVertex3f(-w / 4, -0.2f, -l * 2);
 
   //center center right slope window
@@ -856,16 +852,7 @@ void DrawPlane2()
   glVertex3f(-w / 4, -h, l / 2);
   glVertex3f(-w / 2, -h / 2, l / 2);
   //////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////Propeller ////////////////////////////////////////////
 
-  glColor3f(1.0f, 0.0f, 0.0f);
-  glVertex3f(0.1, -0.2f, -l * 2.1);
-  glColor3f(0.0f, 1.0f, 0.0f);
-  glVertex3f(0.1, -0.1f, -l * 1.8);
-  glColor3f(0.0f, 0.0f, 1.0f);
-  glVertex3f(-0.1, -0.1f, -l * 1.8);
-
-  /////////////////////////////////////////////////////////////////////////////////////////////
   glEnd();
 }
 //|____________________________________________________________________
