@@ -41,3 +41,14 @@ and
 ```
 .\RunOpenGL.bat
 ```
+# The Output be like 
+![alt text](https://github.com/china555/ITCS481_Computer-Graphics/blob/main/Assignment%202/Assets/Image1.png "Front")
+![alt text](https://github.com/china555/ITCS481_Computer-Graphics/blob/main/Assignment%202/Assets/Image2.png "Front")
+![alt text](https://github.com/china555/ITCS481_Computer-Graphics/blob/main/Assignment%202/Assets/Image3.png "Front")
+![alt text](https://github.com/china555/ITCS481_Computer-Graphics/blob/main/Assignment%202/Assets/Image4.png "Front")
+![alt text](https://github.com/china555/ITCS481_Computer-Graphics/blob/main/Assignment%202/Assets/Image5.png "Front")
+![alt text](https://github.com/china555/ITCS481_Computer-Graphics/blob/main/Assignment%202/Assets/Image6.png "Front")
+![alt text](https://github.com/china555/ITCS481_Computer-Graphics/blob/main/Assignment%202/Assets/Image7.png "Front")
+![alt text](https://github.com/china555/ITCS481_Computer-Graphics/blob/main/Assignment%202/Assets/Image8.png "Front")
+![alt text](https://github.com/china555/ITCS481_Computer-Graphics/blob/main/Assignment%202/Assets/Image9.png "Front")
+![alt text](https://github.com/china555/ITCS481_Computer-Graphics/blob/main/Assignment%202/Assets/Image10.png "Front")
