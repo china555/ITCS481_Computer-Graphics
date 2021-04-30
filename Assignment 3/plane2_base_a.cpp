@@ -47,19 +47,21 @@ const float P_WIDTH = 3;
 const float P_LENGTH = 3;
 const float P_HEIGHT = 1.5f;
 
+// Propeller rotation (subpart)
+float pp_angle = 90; // Rotation angle
+
 // Plane transforms
 const gmtl::Vec3f PLANE_FORWARD(0, 0, 1.0f); // Plane's forward translation vector (w.r.t. local frame)
-const float PLANE_ROTATION = 5.0f;           // Plane rotated by 5 degs per input
+const float PLANE_ROTATION = 10.0f;          // Plane rotated by 5 degs per input
 
 // Propeller dimensions (subpart)
-const float PP_WIDTH = 2.0f;
-const float PP_LENGTH = 2.0f;
-const float PP_HEIGHT = 1.0f;
+const float PP_WIDTH = 0.25f;
+const float PP_LENGTH = 1.5f;
 
 // Propeller transforms
-const gmtl::Point3f PROPELLER_POS(P_WIDTH / 4, 0, 0); // Propeller position on the plane (w.r.t. plane's frame)
-const float PROPELLER_ROTATION = 5.0f;                // Propeller rotated by 5 degs per input
-
+const gmtl::Point3f PROPELLER_POS(0, -0.3, (-P_LENGTH / 2) * 3.1); // Propeller position on the plane (w.r.t. plane's frame)
+const float PROPELLER_ROTATION = 10.0f;                            // Propeller rotated by 5 degs per input
+const gmtl::Point3f PROPELLER_POS1(20.0f, 9.8f, 7.5f);
 // Camera's view frustum
 const float CAM_FOV = 90.0f; // Field of view in degs
 
@@ -81,18 +83,12 @@ int w_width = 800;
 int w_height = 600;
 
 // Plane pose (position-quaternion pair)
-gmtl::Point4f plane_p, plane1Position; // Position (using explicit homogeneous form; see Quaternion example code)
-gmtl::Quatf plane_q, plane1Quaternion; // Quaternion
+gmtl::Point4f plane_p, plane1Position, ppPosition;   // Position (using explicit homogeneous form; see Quaternion example code)
+gmtl::Quatf plane_q, plane1Quaternion, ppQuaternion; // Quaternion
 
 // Quaternions to rotate plane
-gmtl::Quatf zrotp_q, xrotp_q, yrotp_q; // Positive and negative Z rotations
-gmtl::Quatf zrotn_q, xrotn_q, yrotn_q;
-
-// Propeller rotation (subpart)
-float pp_angle = 0;   // Rotation angle for subpart C
-float pp_angle_2 = 0; // Rotation angle for subpart B
-float pp_angle_3 = 0; // Rotation angle for subpart A
-float pp_angle_4 = 0; // Rotation angle for subsubpart
+gmtl::Quatf zrotp_q, xrotp_q, yrotp_q, ppzrotp_q; // Positive and negative Z rotations
+gmtl::Quatf zrotn_q, xrotn_q, yrotn_q, ppzrotn_q;
 
 // Mouse & keyboard
 int mx_prev = 0, my_prev = 0;
@@ -120,7 +116,7 @@ void MotionFunc(int x, int y);
 void ReshapeFunc(int w, int h);
 void DrawCoordinateFrame(const float l);
 void DrawPlaneBody(const float width, const float length, const float height);
-void DrawPropeller(const float width, const float length, const float height);
+void DrawPropeller(const float width, const float length);
 
 //|____________________________________________________________________
 //|
@@ -140,9 +136,10 @@ void InitTransforms()
   // Inits plane pose
   plane_p.set(1.0f, 0.0f, 4.0f, 1.0f);
   plane_q.set(0, 0, 0, 1);
+
   plane1Position.set(20.0f, 10.0f, 12.0f, 2.0f);
   plane1Quaternion.set(0, 0, 0, 1);
-
+  ppQuaternion.set(0, 0, 0, 1);
   // Z rotations (roll)
   zrotp_q.set(0, 0, SINTHETA_D2, COSTHETA_D2); // +Z
   zrotn_q = gmtl::makeConj(zrotp_q);           // -Z
@@ -153,6 +150,9 @@ void InitTransforms()
   yrotp_q.set(0, SINTHETA_D2, 0, COSTHETA_D2); // +Y
   yrotn_q = gmtl::makeConj(yrotp_q);
   // TODO: Initializes the remaining transforms
+
+  ppzrotp_q.set(0, 0, SINTHETA_D2, COSTHETA_D2);
+  ppzrotn_q = gmtl::makeConj(zrotp_q);
 }
 
 //|____________________________________________________________________
@@ -281,7 +281,16 @@ void DisplayFunc(void)
   glPushMatrix();
   glTranslatef(PROPELLER_POS[0], PROPELLER_POS[1], PROPELLER_POS[2]); // Positions propeller on the plane
   glRotatef(pp_angle, 0, 0, 1);                                       // Rotates propeller
-  DrawPropeller(PP_WIDTH, PP_LENGTH, PP_HEIGHT);
+  DrawPropeller(PP_WIDTH, PP_LENGTH);
+  DrawCoordinateFrame(1);
+  glPopMatrix();
+  glPopMatrix();
+
+  // Propeller (subpart):
+  glPushMatrix();
+  glTranslatef(PROPELLER_POS1[0], PROPELLER_POS1[1], PROPELLER_POS1[2]); // Positions propeller on the plane
+  glRotatef(pp_angle, 0, 0, 1);                                          // Rotates propeller
+  DrawPropeller(PP_WIDTH, PP_LENGTH);
   DrawCoordinateFrame(1);
   glPopMatrix();
   glPopMatrix();
@@ -330,11 +339,11 @@ void KeyboardFunc(unsigned char key, int x, int y)
     //|____________________________________________________________________
 
   case 'v': // Select camera to view
-    cam_id = (cam_id + 1) % 2;
+    cam_id = (cam_id + 1) % 3;
     printf("View camera = %d\n", cam_id);
     break;
   case 'b': // Select camera to control
-    camctrl_id = (camctrl_id + 1) % 2;
+    camctrl_id = (camctrl_id + 1) % 3;
     printf("Control camera = %d\n", camctrl_id);
     break;
 
@@ -346,7 +355,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
     plane_id = (plane_id + 1) % 2;
     printf("Active plane = %d\n", plane_id + 1);
     break;
-  case 's':
+  case 'c':
   { // Forward translation of the plane (+Z translation)
     if (plane_id == 1)
     {
@@ -360,7 +369,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
     }
   }
   break;
-  case 'f':
+  case ' ':
   { // Backward translation of the plane (-Z translation)
     if (plane_id == 1)
     {
@@ -375,7 +384,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
   }
   break;
 
-  case 'e': // Rolls the plane (+Z rot)
+  case 'q': // Rolls the plane (+Z rot)
     if (plane_id == 1)
     {
       plane1Quaternion = plane1Quaternion * zrotp_q;
@@ -385,7 +394,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
       plane_q = plane_q * zrotp_q;
     }
     break;
-  case 'q': // Rolls the plane (-Z rot)
+  case 'e': // Rolls the plane (-Z rot)
     if (plane_id == 1)
     {
       plane1Quaternion = plane1Quaternion * zrotn_q;
@@ -396,7 +405,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
     }
     break;
 
-  case 'x': // Pitches the plane (+X rot)
+  case 'w': // Pitches the plane (+X rot)
     if (plane_id == 1)
     {
       plane1Quaternion = plane1Quaternion * xrotp_q;
@@ -406,7 +415,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
       plane_q = plane_q * xrotp_q;
     }
     break;
-  case 'c': // Pitches the plane (-X rot)
+  case 's': // Pitches the plane (-X rot)
     if (plane_id == 1)
     {
       plane1Quaternion = plane1Quaternion * xrotn_q;
@@ -426,7 +435,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
       plane_q = plane_q * yrotp_q;
     }
     break;
-  case '1': // Yaws the plane (-Y rot)
+  case 'd': // Yaws the plane (-Y rot)
     if (plane_id == 1)
     {
       plane1Quaternion = plane1Quaternion * yrotn_q;
@@ -445,15 +454,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
   case 'r': // Rotates propeller Y axis
     pp_angle += PROPELLER_ROTATION;
     break;
-  case 't': // Rotates propeller X axis
-    pp_angle_2 += PROPELLER_ROTATION;
-    break;
-  case 'y': // Rotates propeller Z axis
-    pp_angle_3 += PROPELLER_ROTATION;
-    break;
-    // TODO: Add the remaining controls/transforms
   }
-
   glutPostRedisplay(); // Asks GLUT to redraw the screen
 }
 
@@ -970,6 +971,49 @@ void DrawPlaneBody(const float width, const float length, const float height)
   glVertex3f(-w / 2, -h / 2, l / 2);
 
   glEnd();
+
+  glBegin(GL_TRIANGLES);
+  glColor3f(0.9f, 0.2f, 0.2f);
+  ///////////////////////////////Top//////////////////////////////////////////////////////////
+  glVertex3f(0.15, -0.2, -l * 2);
+  glVertex3f(-0.15, -0.2, -l * 2);
+  glVertex3f(((0.15) + (-0.15)) / 2, -0.3, -l * 2.15);
+
+  ///////////////////////////////RightTop//////////////////////////////////////////////////////////
+  glVertex3f(-0.15, -0.2, -l * 2);
+  glVertex3f(-0.3, -0.3, -l * 2);
+  glVertex3f(((0.15) + (-0.15)) / 2, -0.3, -l * 2.15);
+
+  // ///////////////////////////////Right//////////////////////////////////////////////////////////
+  glVertex3f(-0.3, -0.3, -l * 2);
+  glVertex3f(-0.3, -0.4, -l * 2);
+  glVertex3f(((0.15) + (-0.15)) / 2, -0.3, -l * 2.15);
+
+  // ///////////////////////////////lowerRight//////////////////////////////////////////////////////////
+  glVertex3f(-0.3, -0.4, -l * 2);
+  glVertex3f(-0.15, -0.5, -l * 2);
+  glVertex3f(((0.15) + (-0.15)) / 2, -0.3, -l * 2.15);
+
+  // ///////////////////////////////Lower//////////////////////////////////////////////////////////
+  glVertex3f(-0.15, -0.5, -l * 2);
+  glVertex3f(0.15, -0.5, -l * 2);
+  glVertex3f(((0.15) + (-0.15)) / 2, -0.3, -l * 2.15);
+
+  // ///////////////////////////////LeftLower//////////////////////////////////////////////////////////
+  glVertex3f(0.15, -0.5, -l * 2);
+  glVertex3f(0.3, -0.4, -l * 2);
+  glVertex3f(((0.15) + (-0.15)) / 2, -0.3, -l * 2.15);
+
+  // // ///////////////////////////////Left//////////////////////////////////////////////////////////
+  glVertex3f(0.3, -0.4, -l * 2);
+  glVertex3f(0.3, -0.3, -l * 2);
+  glVertex3f(((0.15) + (-0.15)) / 2, -0.3, -l * 2.15);
+
+  // ///////////////////////////////TopLeft//////////////////////////////////////////////////////////
+  glVertex3f(0.3, -0.3, -l * 2);
+  glVertex3f(0.15, -0.2, -l * 2);
+  glVertex3f(((0.15) + (-0.15)) / 2, -0.3, -l * 2.15);
+  glEnd();
 }
 
 //|____________________________________________________________________
@@ -983,80 +1027,24 @@ void DrawPlaneBody(const float width, const float length, const float height)
 //! Draws a propeller.
 //|____________________________________________________________________
 
-void DrawPropeller(const float width, const float length, const float height)
+void DrawPropeller(const float width, const float length)
 {
-  float w = width;
-  float l = length;
-  float h = height;
 
-  glBegin(GL_TRIANGLES);
-  glColor3f(0.9f, 0.1f, 0.2f);
-  ///////////////////////////////Top//////////////////////////////////////////////////////////
-  glVertex3f(-0.85, -0.1, -l * 2.9);
-  glVertex3f(-0.65, -0.1, -l * 2.9);
-  glVertex3f(((-0.85) + (-0.65)) / 2, -0.2, -l * 3.2);
-
-  ///////////////////////////////RightTop//////////////////////////////////////////////////////////
-  glVertex3f(-1.05, -0.2, -l * 2.9);
-  glVertex3f(-0.85, -0.1, -l * 2.9);
-  glVertex3f(((-0.85) + (-0.65)) / 2, -0.2, -l * 3.2);
-
-  // ///////////////////////////////Right//////////////////////////////////////////////////////////
-  glVertex3f(-1.05, -0.4, -l * 2.9);
-  glVertex3f(-1.05, -0.2, -l * 2.9);
-  glVertex3f(((-0.85) + (-0.65)) / 2, -0.2, -l * 3.2);
-
-  // ///////////////////////////////lowerRight//////////////////////////////////////////////////////////
-  glVertex3f(-0.85, -0.6, -l * 2.9);
-  glVertex3f(-1.05, -0.4, -l * 2.9);
-  glVertex3f(((-0.85) + (-0.65)) / 2, -0.2, -l * 3.2);
-
-  // ///////////////////////////////Lower//////////////////////////////////////////////////////////
-  glVertex3f(-0.65, -0.6, -l * 2.9);
-  glVertex3f(-0.85, -0.6, -l * 2.9);
-  glVertex3f(((-0.85) + (-0.65)) / 2, -0.2, -l * 3.2);
-
-  // ///////////////////////////////LeftLower//////////////////////////////////////////////////////////
-  glVertex3f(-0.45, -0.4, -l * 2.9);
-  glVertex3f(-0.65, -0.6, -l * 2.9);
-  glVertex3f(((-0.85) + (-0.65)) / 2, -0.2, -l * 3.2);
-
-  // // ///////////////////////////////Left//////////////////////////////////////////////////////////
-  glVertex3f(-0.45, -0.2, -l * 2.9);
-  glVertex3f(-0.45, -0.4, -l * 2.9);
-  glVertex3f(((-0.85) + (-0.65)) / 2, -0.2, -l * 3.2);
-
-  // ///////////////////////////////TopLeft//////////////////////////////////////////////////////////
-  glVertex3f(-0.65, -0.1, -l * 2.9);
-  glVertex3f(-0.45, -0.2, -l * 2.9);
-  glVertex3f(((-0.85) + (-0.65)) / 2, -0.2, -l * 3.2);
-  glEnd();
+  float w = width / 2;
+  float l = length / 2;
 
   glBegin(GL_QUADS);
   // Propeller is white
-  // glColor3f(1.0f, 1.0f, 1.0f);
+  glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(-w, -l, -l * 2);
+  glVertex3f(w, -l, -l * 2);
+  glVertex3f(w, l, -l * 2);
+  glVertex3f(-w, l, -l * 2);
 
-  //pp 1
-  glColor3f(0.8f, 0.8f, 0.9f);
-  glVertex3f(-0.69, -0.15, -l * 3);
-  glVertex3f(-0.54, -0.21, -l * 3);
-  glVertex3f(-0.1, 0.3f, -l * 3);
-  glVertex3f(-0.5, 0.6f, -l * 3);
-
-  //pp2
-  glVertex3f(-0.9, -0.19, -l * 3);
-  glVertex3f(-1.02, -0.30, -l * 3);
-  glVertex3f(-1.71, 0.3f, -l * 3);
-  glVertex3f(-1.31, 0.6f, -l * 3);
-
-  //pp3
-  glVertex3f(-0.85, -0.2, -l * 3);
-  glVertex3f(-0.71, -0.2, -l * 3);
-  glVertex3f(-0.55, -1.0f, -l * 3);
-  glVertex3f(-0.95, -1.1f, -l * 3);
-
-  // glVertex3f(-0.65, -0.6, -l * 2.9);
-  // glVertex3f(-0.85, -0.6, -l * 2.9);
+  glVertex3f(-l, -w, -l * 2);
+  glVertex3f(-l, w, -l * 2);
+  glVertex3f(l, w, -l * 2);
+  glVertex3f(l, -w, -l * 2);
   glEnd();
 }
 
