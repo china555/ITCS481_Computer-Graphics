@@ -288,8 +288,26 @@ void DisplayFunc(void)
 
   // Propeller (subpart):
   glPushMatrix();
+  glTranslatef(6, 1.5, P_LENGTH + 0.3); // Positions propeller on the plane
+  glRotatef(pp_angle, 0, 0, 1);         // Rotates propeller
+  DrawPropeller(PP_WIDTH, PP_LENGTH);
+  DrawCoordinateFrame(1);
+  glPopMatrix();
+  glPopMatrix();
+
+  // Propeller (subpart):
+  glPushMatrix();
   glTranslatef(PROPELLER_POS1[0], PROPELLER_POS1[1], PROPELLER_POS1[2]); // Positions propeller on the plane
   glRotatef(pp_angle, 0, 0, 1);                                          // Rotates propeller
+  DrawPropeller(PP_WIDTH, PP_LENGTH);
+  DrawCoordinateFrame(1);
+  glPopMatrix();
+  glPopMatrix();
+
+  // Propeller (subpart):
+  glPushMatrix();
+  glTranslatef(-4, 1.5, P_LENGTH + 0.3); // Positions propeller on the plane
+  glRotatef(pp_angle, 0, 0, 1);          // Rotates propeller
   DrawPropeller(PP_WIDTH, PP_LENGTH);
   DrawCoordinateFrame(1);
   glPopMatrix();
