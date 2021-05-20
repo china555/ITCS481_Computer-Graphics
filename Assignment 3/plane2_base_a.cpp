@@ -331,7 +331,6 @@ void DisplayFunc(void)
   DrawCoordinateFrame(1);
   glPopMatrix();
   glPopMatrix();
-
   glutSwapBuffers(); // Replaces glFlush() to use double buffering
 }
 
